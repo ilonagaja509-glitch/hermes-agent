@@ -1060,6 +1060,7 @@ def _setup_tts_provider(config: dict):
         "gemini": "Google Gemini TTS",
         "neutts": "NeuTTS",
         "kittentts": "KittenTTS",
+        "piper": "Piper",
     }
     current_label = provider_labels.get(current_provider, current_provider)
 
@@ -1084,9 +1085,10 @@ def _setup_tts_provider(config: dict):
             "Google Gemini TTS (30 prebuilt voices, prompt-controllable, needs API key)",
             "NeuTTS (local on-device, free, ~300MB model download)",
             "KittenTTS (local on-device, free, lightweight ~25-80MB ONNX)",
+            "Piper (local on-device, free, 44 languages via OHF-Voice/piper1-gpl neural VITS)",
         ]
     )
-    providers.extend(["edge", "elevenlabs", "openai", "xai", "minimax", "mistral", "gemini", "neutts", "kittentts"])
+    providers.extend(["edge", "elevenlabs", "openai", "xai", "minimax", "mistral", "gemini", "neutts", "kittentts", "piper"])
     choices.append(f"Keep current ({current_label})")
     keep_current_idx = len(choices) - 1
     idx = prompt_choice("Select TTS provider:", choices, keep_current_idx)

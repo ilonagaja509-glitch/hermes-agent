@@ -244,6 +244,15 @@ TOOL_CATEGORIES = {
                 ],
                 "tts_provider": "elevenlabs",
             },
+            {
+                "name": "MiniMax TTS",
+                "badge": "paid",
+                "tag": "High quality with voice cloning",
+                "env_vars": [
+                    {"key": "MINIMAX_API_KEY", "prompt": "MiniMax API key", "url": "https://www.minimax.io/"},
+                ],
+                "tts_provider": "minimax",
+            },
             # Mistral Voxtral TTS — `mistralai` SDK lazy-installs on first use.
             {
                 "name": "Mistral (Voxtral TTS)",
@@ -262,6 +271,14 @@ TOOL_CATEGORIES = {
                     {"key": "GEMINI_API_KEY", "prompt": "Gemini API key", "url": "https://aistudio.google.com/app/apikey"},
                 ],
                 "tts_provider": "gemini",
+            },
+            {
+                "name": "NeuTTS",
+                "badge": "local · free",
+                "tag": "On-device TTS via neutts, no API key",
+                "env_vars": [],
+                "tts_provider": "neutts",
+                "post_setup": "neutts",
             },
             {
                 "name": "KittenTTS",
