@@ -103,6 +103,30 @@ class TestFallbackChainAdvancement:
             assert agent.model == "gpt-4o"
             assert agent._fallback_activated is True
 
+    def test_flush_buffered_status_on_successful_fallback_activation(self):
+        """Bug #35419: buffered status must reach the gateway before the answer."""
+        fbs = [
+            {"provider": "openai", "model": "gpt-4o"},
+            {"provider": "zai", "model": "glm-4.7"},
+        ]
+        agent = _make_agent(fallback_model=fbs)
+        agent._emit_status = lambda msg: emitted.append(msg)
+        emitted = []
+
+        agent._buffer_status("⚠️ Rate limited — switching to fallback provider...")
+        assert agent._retry_status_buffer  # buffered, not yet emitted
+
+        with patch("agent.auxiliary_client.resolve_provider_client",
+                    return_value=(_mock_client(), "gpt-4o")):
+            assert agent._try_activate_fallback() is True
+
+        # The pre-buffer is flushed and the new fallback-notice is emitted too.
+        assert "Rate limited" in emitted[0]
+        assert "gpt-4o" in emitted[1]
+        assert "openai" in emitted[1]
+        # Buffer must be drained so subsequent success doesn't replay them.
+        assert agent._retry_status_buffer == []
+
     def test_second_fallback_works(self):
         fbs = [
             {"provider": "openai", "model": "gpt-4o"},
